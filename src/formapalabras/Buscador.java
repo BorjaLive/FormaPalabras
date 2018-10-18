@@ -1,5 +1,6 @@
 package formapalabras;
 
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +28,18 @@ public class Buscador {
         }
         
         ArrayList<Palabra> palabras = new ArrayList<>();
-        Palabra palabra;    //variable temporal
+        String palabra;
+        Palabra resultado;    //variable temporal
         
         //Recorrer todas las palabras del diccionario
         while(d.existeSiguiente()){
-            palabra = diferencia(letras,d.siguiente());
-            if(palabra != null)
-                palabras.add(palabra);
+           palabra = d.siguiente();
+            if(abs(letras.length() - palabra.length()) <= tolerancia){  //Primera comprovación. Si no coinciden en numero de letras, no pueden ser iguales.
+                resultado = diferencia(letras,palabra);
+                if(resultado.getSobran() + resultado.getFaltan() <= tolerancia){  //Si culple los requisitos, crea el objeto y lo devuelve
+                    palabras.add(resultado);
+                }
+            }
         }
         
         return palabras;
@@ -62,11 +68,7 @@ public class Buscador {
         }
         sobran = letras.length();   //Las letras que no hayan sido eliminadas, sobran
 
-        if(sobran + faltan <= tolerancia){  //Si culple los requisitos, crea el objeto y lo devuelve
-            return new Palabra(original,sobran,faltan);
-        }else{
-            return null;
-        }
+        return new Palabra(original,sobran,faltan);
     }
     
     private String eliminarTildes(String palabra){

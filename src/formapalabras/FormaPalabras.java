@@ -10,7 +10,7 @@ public class FormaPalabras {
         List<Palabra> coincidencias = b.similares("añac");
         
         for(Palabra coincidencia : coincidencias){
-            System.out.println("PALABRA: "+coincidencia.getPalabra()+"  SOBRAN: "+coincidencia.getSobran()+"  FALTAN: "+coincidencia.getFaltan());
+            System.out.println("PALABRA: "+coincidencia.getPalabra()+"\tSOBRAN: "+coincidencia.getSobran()+"\tFALTAN: "+coincidencia.getFaltan());
         }
     }
 }
