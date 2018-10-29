@@ -9,14 +9,17 @@ public class Buscador {
     
     boolean extendido;
     boolean todasSobran;
-    int tolerancia;
+    int toleranciaFaltan, toleranciaSobran, tamano;
     
-    public Buscador(boolean extendido, int tolerancia){
+    public Buscador(boolean extendido, int toleranciaFaltan, int toleranciaSobran, int tamano){
         this.extendido = extendido;   //Usar, o no, el diccionario grande.
-        this.tolerancia = tolerancia;   //Límite máximo de letras añadidas o no usadas para formar la palabra.
+        this.toleranciaFaltan = toleranciaFaltan;   //Límite máximo de letras añadidas o no usadas para formar la palabra.
+        this.toleranciaSobran = toleranciaSobran;
+        this.tamano = tamano;
     }
     
     public List<Palabra> similares(String letras){
+        letras = letras.toLowerCase();
         //Cargar el diccionario.
         Diccionario d;
         if(extendido){
@@ -34,12 +37,12 @@ public class Buscador {
         //Recorrer todas las palabras del diccionario
         while(d.existeSiguiente()){
            palabra = d.siguiente();
-            if(abs(letras.length() - palabra.length()) <= tolerancia){  //Primera comprovación. Si no coinciden en numero de letras, no pueden ser iguales.
-                resultado = diferencia(letras,palabra);
-                if(resultado.getSobran() + resultado.getFaltan() <= tolerancia){  //Si culple los requisitos, crea el objeto y lo devuelve
+           if(tamano == -1 || palabra.length() == tamano){
+               resultado = diferencia(letras,palabra);
+                if(resultado.getSobran() <= toleranciaSobran && resultado.getFaltan() <= toleranciaFaltan){  //Si culple los requisitos, crea el objeto y lo devuelve
                     palabras.add(resultado);
                 }
-            }
+           }
         }
         
         return palabras;
